@@ -1,9 +1,5 @@
 import sqlite3
-def cadastrar (self):
-    pass
 
-def entrar(self):
-    pass
 
 class backend():
     def conecta_banco(self):
