@@ -3,8 +3,9 @@ import tkinter as tk
 from tkinter import ttk, font
 from tkinter import messagebox
 from tkinter import *
+from backend import backend
 
-class Tela_Principal():
+class Tela_Principal(backend):
     def __init__(self, windows):
         self.janela = windows
         self.janela.title('SNAC - Login')
@@ -44,7 +45,7 @@ class Tela_Principal():
 
         self.caixa_senha = customtkinter.CTkEntry(self.frame,
                                                 placeholder_text='Senha',
-                                                width=250, height=50, border_width=0, corner_radius=12, bg_color='white', text_color='black')
+                                                width=250, height=50, border_width=0, corner_radius=12, bg_color='white', text_color='black', show='*')
         self.caixa_senha.place(x=70, y=300)
 
         # Checkbox de manter login
@@ -67,13 +68,13 @@ class Tela_Principal():
 
         # botões
 
-        self.botao_cadastrar = customtkinter.CTkButton(self.janela,
+        self.botao_entrar = customtkinter.CTkButton(self.janela,
                                                        text='',
                                                        text_color='black', fg_color='#316dbc', hover_color='#7ccaf4',
                                                        border_color='black', bg_color='white',
                                                        font=('Arial', 15), command=self.janela_lobby, width=50, height=50,
                                                        image=self.seta_branca2, anchor='center')
-        self.botao_cadastrar.place(x=170, y=410)
+        self.botao_entrar.place(x=170, y=410)
 
         self.funcao_cadastrar = customtkinter.CTkButton(self.frame,
                                                         text='Cadastre-se', font=('Arial', 12), text_color='gray', bg_color='transparent',
@@ -165,13 +166,13 @@ class Tela_Principal():
         self.caixa_senha = customtkinter.CTkEntry(self.frame2,
                                                   placeholder_text='Senha',
                                                   width=250, height=50, border_width=0, corner_radius=12,
-                                                  bg_color='white', text_color='black')
+                                                  bg_color='white', text_color='black', show='*')
         self.caixa_senha.place(x=65, y=330)
 
         self.caixa_confirmar_senha = customtkinter.CTkEntry(self.frame2,
                                                             placeholder_text='Senha',
                                                             width=250, height=50, border_width=0, corner_radius=12,
-                                                            bg_color='white', text_color='black')
+                                                            bg_color='white', text_color='black', show='*')
         self.caixa_confirmar_senha.place(x=65, y=425)
 
         # ------------Botôes------------
@@ -180,7 +181,7 @@ class Tela_Principal():
                                                        text='Cadastrar',
                                                        text_color='white', fg_color='#316dbc', hover_color='#7ccaf4',
                                                        border_color='black', bg_color='white', corner_radius=5,
-                                                       font=('Arial', 15, 'bold'), width=55, height=30)
+                                                       font=('Arial', 15, 'bold'), width=55, height=30, command=self.cadastrar)
         self.botao_cadastrar.place(x=140, y=500)
 
         self.botao_voltar = customtkinter.CTkButton(self.frame2,
@@ -195,64 +196,82 @@ class Tela_Principal():
 #------------Tela de Lobby / Segunda tela------------
 
     def janela_lobby(self):
-        self.janela.withdraw()
-        self.janela3 = customtkinter.CTkToplevel()
-        self.janela3.title('SNAC - Lobby')
-        self.janela3.geometry('1000x600+750+150')
-        self.janela['bg'] = '#242424'
-        self.janela3.resizable(width=False, height=False)
+        if self.caixa_usuario == '' or self.caixa_senha == '':
+            messagebox.showinfo('Cadastro', 'Preencha os campos.')
+        else:
+            self.recebe_email = self.caixa_usuario.get()
+            self.recebe_senha = self.caixa_senha.get()
+            self.conecta_banco()
+            self.sql.execute('''SELECT * FROM usuarios WHERE (email = ? and senha = ?)''',
+                            (self.recebe_email, self.recebe_senha))
+            self.pesquisa_dados = self.sql.fetchone()
+            print(self.pesquisa_dados)
+            try:
+                if self.recebe_email and self.recebe_senha in self.pesquisa_dados:
+                    self.desconecta_banco()
 
-        self.imagem1 = PhotoImage(file='imagens/teams.png')
-        self.imagem2 = PhotoImage(file='imagens/py2.png')
-        self.tela1 = PhotoImage(file='imagens/anuncio1.png')
-        self.tela2 = PhotoImage(file='imagens/anuncio2.png')
-        self.tela3 = PhotoImage(file='imagens/anuncio3.png')
+                    self.janela.withdraw()
+                    self.janela3 = customtkinter.CTkToplevel()
+                    self.janela3.title('SNAC - Lobby')
+                    self.janela3.geometry('1000x600+750+150')
+                    self.janela['bg'] = '#242424'
+                    self.janela3.resizable(width=False, height=False)
 
-        self.fundo = Label(self.janela3, image=self.imagem2, width=1000, height=600)
-        self.fundo.place(x=-2, y=53)
+                    self.imagem1 = PhotoImage(file='imagens/teams.png')
+                    self.imagem2 = PhotoImage(file='imagens/py2.png')
+                    self.tela1 = PhotoImage(file='imagens/anuncio1.png')
+                    self.tela2 = PhotoImage(file='imagens/anuncio2.png')
+                    self.tela3 = PhotoImage(file='imagens/anuncio3.png')
 
-        # Botões inferiores
-        self.frame_1 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color='#126F94', image= self.tela1, text='', fg_color='#126F94')
-        self.frame_1.place(x= 15, y=450)
+                    self.fundo = Label(self.janela3, image=self.imagem2, width=1000, height=600)
+                    self.fundo.place(x=-2, y=53)
 
-        self.frame_2 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color= '#126F94', text= '', image=self.tela2,fg_color='#126F94' )
-        self.frame_2.place(x=400, y=450)
+                    # Botões inferiores
+                    self.frame_1 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color='#126F94', image= self.tela1, text='', fg_color='#126F94')
+                    self.frame_1.place(x= 15, y=450)
 
-        self.frame_3 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color='#126F94', text='', fg_color='#126F94', image=self.tela3)
-        self.frame_3.place(x=780, y=450)
+                    self.frame_2 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color= '#126F94', text= '', image=self.tela2,fg_color='#126F94' )
+                    self.frame_2.place(x=400, y=450)
 
-        # frame principal black
-        self.frame_4 = customtkinter.CTkFrame(self.janela3, width=1000, height=110, fg_color='#3B3538', corner_radius=0)
-        self.frame_4.place(x=0, y=0)
+                    self.frame_3 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color='#126F94', text='', fg_color='#126F94', image=self.tela3)
+                    self.frame_3.place(x=780, y=450)
 
-        self.jogar = customtkinter.CTkButton(self.frame_4, text='Jogar', text_color='white', font=('Bold', 25),
-                                             corner_radius=18, width=150, command=self.janela_jogar,
-                                             height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
-        self.jogar.place(x=105, y=40)
+                    # frame principal black
+                    self.frame_4 = customtkinter.CTkFrame(self.janela3, width=1000, height=110, fg_color='#3B3538', corner_radius=0)
+                    self.frame_4.place(x=0, y=0)
+
+                    self.jogar = customtkinter.CTkButton(self.frame_4, text='Jogar', text_color='white', font=('Bold', 25),
+                                                        corner_radius=18, width=150, command=self.janela_jogar,
+                                                        height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
+                    self.jogar.place(x=105, y=40)
 
 
-        self.bot3 = customtkinter.CTkButton(self.frame_4, text='Loja', text_color='white', font=('Bold', 19),
-                                            corner_radius=18, width=150,
-                                            height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
-        self.bot3.place(x=455, y=40)
+                    self.bot3 = customtkinter.CTkButton(self.frame_4, text='Loja', text_color='white', font=('Bold', 19),
+                                                        corner_radius=18, width=150,
+                                                        height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
+                    self.bot3.place(x=455, y=40)
 
-        self.bot4 = customtkinter.CTkButton(self.frame_4, text='Perfil', text_color='white', font=('Bold', 19),
-                                            corner_radius=18, width=150,
-                                            height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
-        self.bot4.place(x=625, y=40)
+                    self.bot4 = customtkinter.CTkButton(self.frame_4, text='Perfil', text_color='white', font=('Bold', 19),
+                                                        corner_radius=18, width=150,
+                                                        height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
+                    self.bot4.place(x=625, y=40)
 
-        self.bot5 = customtkinter.CTkButton(self.frame_4, text='', width=40,
-                                            height=40, bg_color='#3B3538', fg_color='#3B3538',
-                                            hover_color='#F2CB05', image=self.imagem1, anchor='center',
-                                            compound='left')
-        self.bot5.place(x=890, y=40)
+                    self.bot5 = customtkinter.CTkButton(self.frame_4, text='', width=40,
+                                                        height=40, bg_color='#3B3538', fg_color='#3B3538',
+                                                        hover_color='#F2CB05', image=self.imagem1, anchor='center',
+                                                        compound='left')
+                    self.bot5.place(x=890, y=40)
 
-        self.combobox = customtkinter.CTkOptionMenu(self.janela3, values=['PYTHON', 'JAVA', 'PORTUGOL'],
-                                                    corner_radius=18, fg_color='#7CCAF4',
-                                                    bg_color='#3B3538', text_color='white', width=150, height=40,
-                                                    font=('Bold', 17))
-        self.combobox.set('Modos')
-        self.combobox.place(x=280, y=40)
+                    self.combobox = customtkinter.CTkOptionMenu(self.janela3, values=['PYTHON', 'JAVA', 'PORTUGOL'],
+                                                                corner_radius=18, fg_color='#7CCAF4',
+                                                                bg_color='#3B3538', text_color='white', width=150, height=40,
+                                                                font=('Bold', 17))
+                    self.combobox.set('Modos')
+                    self.combobox.place(x=280, y=40)
+            except:
+                    messagebox.showwarning('ERRO', 'email ou senha incorreto')
+                    self.desconecta_banco()
+
 
 #---------Tela para Jogar / Terceira tela---------
 
@@ -422,6 +441,25 @@ class Tela_Principal():
                                                          width=150,
                                                          height=45, corner_radius=50)
         self.bot_thumb8.place(x=100, y=700)
+
+#-----------------------------BACKEND---------------------------------------
+
+    def cadastrar (self):
+        self.criar_banco()
+        self.capturar_nome = self.caixa_nome.get()
+        self.capturar_email = self.caixa_email.get()
+        self.capturar_senha = self.caixa_senha.get()
+        self.capturar_confirmar_senha = self.caixa_confirmar_senha.get()
+        self.conecta_banco()
+        self.sql.execute('''
+            INSERT INTO usuarios (nome, email, senha, confirmarSenha)
+            values (?,?,?,?)''',
+                        (self.capturar_nome, self.capturar_email, self.capturar_senha, self.capturar_confirmar_senha))
+        self.conexao.commit()
+        print('Dados cadastrados')
+
+        self.desconecta_banco()
+
 
 
 # ----------------------- Chamando a classe ModeloSistema -----------------
