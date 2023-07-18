@@ -11,7 +11,7 @@ class backend():
         self.conexao.close()
         print('Banco de dados desconectado')
 
-    def criar_banco(self):
+    def criar_tabela(self):
         self.conecta_banco()
         self.sql.execute(
             '''
