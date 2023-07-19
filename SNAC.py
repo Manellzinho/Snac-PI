@@ -9,7 +9,7 @@ class Tela_Principal(backend):
     def __init__(self, windows):
         self.janela = windows
         self.janela.title('SNAC - Login')
-        self.janela.geometry('1000x600+750+150')
+        self.janela.geometry('1500x800+550+150')
         self.janela.resizable(width=False, height=False)
         self.logo = PhotoImage(file ='imagens/Fundo_PrimeiraTela.png')
         self.seta_branca2 = PhotoImage(file='imagens/Seta2_Branca.png')
@@ -111,7 +111,7 @@ class Tela_Principal(backend):
         self.janela.withdraw()
         self.janela2 = customtkinter.CTkToplevel()
         self.janela2.title('SNAC - Cadastro')
-        self.janela2.geometry('1000x600+750+150')
+        self.janela2.geometry('1500x800+550+150')
         self.janela2.resizable(width=False, height=False)
         self.seta_voltar = PhotoImage(file='imagens/Seta_voltar.png')
         self.logo_imagem2 = Label(self.janela2, image=self.logo, borderwidth=0)
@@ -197,11 +197,11 @@ class Tela_Principal(backend):
 #------------Tela de Lobby / Segunda tela------------
 
     def janela_lobby(self):
-        if self.caixa_usuario == '' or self.caixa_senha == '':
+        self.recebe_usuario = self.caixa_usuario.get()
+        self.recebe_senha = self.caixa_senha.get()
+        if self.recebe_usuario == '' or self.recebe_senha == '':
             messagebox.showinfo('Cadastro', 'Preencha os campos.')
         else:
-            self.recebe_usuario = self.caixa_usuario.get()
-            self.recebe_senha = self.caixa_senha.get()
             self.conecta_banco()
             self.sql.execute('''SELECT * FROM usuarios WHERE (nome = ? and senha = ?)''',
                             (self.recebe_usuario, self.recebe_senha))
@@ -214,7 +214,7 @@ class Tela_Principal(backend):
                     self.janela.withdraw()
                     self.janela3 = customtkinter.CTkToplevel()
                     self.janela3.title('SNAC - Lobby')
-                    self.janela3.geometry('1000x600+750+150')
+                    self.janela3.geometry('1500x800+550+150')
                     self.janela['bg'] = '#242424'
                     self.janela3.resizable(width=False, height=False)
 
@@ -267,8 +267,11 @@ class Tela_Principal(backend):
                                                                 corner_radius=18, fg_color='#7CCAF4',
                                                                 bg_color='#3B3538', text_color='white', width=150, height=40,
                                                                 font=('Bold', 17))
+                    
                     self.combobox.set('PYTHON')
                     self.combobox.place(x=280, y=40)
+
+
             except:
                     messagebox.showwarning('ERRO', 'email ou senha incorreto')
                     self.desconecta_banco()
@@ -277,171 +280,175 @@ class Tela_Principal(backend):
 #---------Tela para Jogar / Terceira tela---------
 
     def janela_jogar(self):
-        self.janela3.withdraw()
-        self.janela4 = Toplevel()
-        self.janela4.title('SNAC - Jogar')
-        self.janela4['bg']= '#306D92'
-        self.janela4.geometry('1500x800+550+150')
-        self.janela4.resizable(width=False, height=False)
+        valor_selecionado = self.combobox.get()
+        if valor_selecionado != 'PYTHON':
+            self.alerta()
+        else:
+            self.janela3.withdraw()
+            self.janela4 = Toplevel()
+            self.janela4.title('SNAC - Jogar')
+            self.janela4['bg']= '#306D92'
+            self.janela4.geometry('1500x800+550+150')
+            self.janela4.resizable(width=False, height=False)
 
-        # Imagens
-        self.img2 = PhotoImage(file='imagens/Engrenagem.png')
-        self.img3 = PhotoImage(file='imagens/thumb1.png')
-        self.img4 = PhotoImage(file='imagens/thumb2.png')
-        self.img5 = PhotoImage(file='imagens/thumb3.png')
-        self.img6 = PhotoImage(file='imagens/thumb4.png')
-        self.img7 = PhotoImage(file='imagens/thumb5.png')
-        self.img8 = PhotoImage(file='imagens/thumb6.png')
-        self.img9 = PhotoImage(file='imagens/thumb7.png')
-        self.img10 = PhotoImage(file='imagens/thumb8.png')
+            # Imagens
+            self.img2 = PhotoImage(file='imagens/Engrenagem.png')
+            self.img3 = PhotoImage(file='imagens/thumb1.png')
+            self.img4 = PhotoImage(file='imagens/thumb2.png')
+            self.img5 = PhotoImage(file='imagens/thumb3.png')
+            self.img6 = PhotoImage(file='imagens/thumb4.png')
+            self.img7 = PhotoImage(file='imagens/thumb5.png')
+            self.img8 = PhotoImage(file='imagens/thumb6.png')
+            self.img9 = PhotoImage(file='imagens/thumb7.png')
+            self.img10 = PhotoImage(file='imagens/thumb8.png')
 
-        self.frame3 = customtkinter.CTkFrame(self.janela4, fg_color='#3B3538', corner_radius=0, width=2000, height=150)
-        self.frame3.place(x=0, y=0)
+            self.frame3 = customtkinter.CTkFrame(self.janela4, fg_color='#3B3538', corner_radius=0, width=2000, height=150)
+            self.frame3.place(x=0, y=0)
 
-        # -----------------------------BOTÕES-------------------------------------------
+            # -----------------------------BOTÕES-------------------------------------------
 
-        self.bot_voltar = customtkinter.CTkButton(self.janela4,
-                                                       text='VOLTAR',
-                                                       text_color='white', fg_color='#7CCAF4', bg_color='#3B3538',
-                                                       hover_color='#F2CB05', command=self.voltar2,
-                                                       font=('Arial', 20, 'bold'),
-                                                       width=200, height=50, corner_radius=18)
-        self.bot_voltar.place(x=65, y=55)
-
-        self.bot_loja = customtkinter.CTkButton(self.janela4,
-                                                        text='Loja',
+            self.bot_voltar = customtkinter.CTkButton(self.janela4,
+                                                        text='VOLTAR',
                                                         text_color='white', fg_color='#7CCAF4', bg_color='#3B3538',
-                                                        hover_color='#F2CB05',
+                                                        hover_color='#F2CB05', command=self.voltar2,
                                                         font=('Arial', 20, 'bold'),
-                                                        width=150,
-                                                        height=40, corner_radius=18, command=self.alerta)
-        self.bot_loja.place(x=320, y=60)
+                                                        width=200, height=50, corner_radius=18)
+            self.bot_voltar.place(x=65, y=55)
 
-        self.bot_perfil = customtkinter.CTkButton(self.janela4,
-                                                        text='Perfil',
-                                                        text_color='white', fg_color='#7CCAF4', bg_color='#3B3538',
-                                                        hover_color='#F2CB05',
-                                                        font=('Arial', 20, 'bold'),
-                                                        width=150,
-                                                        height=40, corner_radius=18, command=self.alerta)
-        self.bot_perfil.place(x=520, y=60)
+            self.bot_loja = customtkinter.CTkButton(self.janela4,
+                                                            text='Loja',
+                                                            text_color='white', fg_color='#7CCAF4', bg_color='#3B3538',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=40, corner_radius=18, command=self.alerta)
+            self.bot_loja.place(x=320, y=60)
 
-        self.botao_config = customtkinter.CTkButton(self.janela4, text='', image=self.img2, compound='left', width=10,
-                                                    height=10, anchor='center', fg_color='#3B3538', bg_color='#3B3538',
-                                                    hover_color='#F2CB05', command=self.alerta)
-        self.botao_config.place(x=1400, y=60)
+            self.bot_perfil = customtkinter.CTkButton(self.janela4,
+                                                            text='Perfil',
+                                                            text_color='white', fg_color='#7CCAF4', bg_color='#3B3538',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=40, corner_radius=18, command=self.alerta)
+            self.bot_perfil.place(x=520, y=60)
 
-        self.imagem_1 = customtkinter.CTkButton(self.janela4, text='', image=self.img3, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_1.place(x=55, y=190)
+            self.botao_config = customtkinter.CTkButton(self.janela4, text='', image=self.img2, compound='left', width=10,
+                                                        height=10, anchor='center', fg_color='#3B3538', bg_color='#3B3538',
+                                                        hover_color='#F2CB05', command=self.alerta)
+            self.botao_config.place(x=1400, y=60)
 
-        self.imagem_2 = customtkinter.CTkButton(self.janela4, text='', image=self.img4, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_2.place(x=60, y=500)
+            self.imagem_1 = customtkinter.CTkButton(self.janela4, text='', image=self.img3, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_1.place(x=55, y=190)
 
-        self.imagem_3 = customtkinter.CTkButton(self.janela4, text='', image=self.img5, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_3.place(x=450, y=500)
+            self.imagem_2 = customtkinter.CTkButton(self.janela4, text='', image=self.img4, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_2.place(x=60, y=500)
 
-        self.imagem_4 = customtkinter.CTkButton(self.janela4, text='', image=self.img6, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_4.place(x=1200, y=500)
+            self.imagem_3 = customtkinter.CTkButton(self.janela4, text='', image=self.img5, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_3.place(x=450, y=500)
 
-        self.imagem_5 = customtkinter.CTkButton(self.janela4, text='', image=self.img7, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_5.place(x=450, y=190)
+            self.imagem_4 = customtkinter.CTkButton(self.janela4, text='', image=self.img6, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_4.place(x=1200, y=500)
 
-        self.imagem_6 = customtkinter.CTkButton(self.janela4, text='', image=self.img8, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_6.place(x=850, y=190)
+            self.imagem_5 = customtkinter.CTkButton(self.janela4, text='', image=self.img7, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_5.place(x=450, y=190)
 
-        self.imagem_7 = customtkinter.CTkButton(self.janela4, text='', image=self.img9, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_7.place(x=850, y=500)
+            self.imagem_6 = customtkinter.CTkButton(self.janela4, text='', image=self.img8, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_6.place(x=850, y=190)
 
-        self.imagem_8 = customtkinter.CTkButton(self.janela4, text='', image=self.img10, compound='left', width=10,
-                                               height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
-                                               hover_color='#306D92', corner_radius=100)
-        self.imagem_8.place(x=1200, y=190)
+            self.imagem_7 = customtkinter.CTkButton(self.janela4, text='', image=self.img9, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_7.place(x=850, y=500)
 
-        self.bot_thumb1 = customtkinter.CTkButton(self.janela4,
-                                                        text='Variavel',
-                                                        text_color='white', fg_color='black', bg_color='#306D92',
-                                                        hover_color='#F2CB05',
-                                                        font=('Arial', 20, 'bold'),
-                                                        width=150,
-                                                        height=45, corner_radius=18)
-        self.bot_thumb1.place(x=100, y=400)
+            self.imagem_8 = customtkinter.CTkButton(self.janela4, text='', image=self.img10, compound='left', width=10,
+                                                height=10, anchor='center', fg_color='#306D92', bg_color='#3B3538',
+                                                hover_color='#306D92', corner_radius=100)
+            self.imagem_8.place(x=1200, y=190)
 
-        self.bot_thumb2 = customtkinter.CTkButton(self.janela4,
-                                                        text='Função',
-                                                        text_color='white', fg_color='black', bg_color='#306D92',
-                                                        hover_color='#F2CB05',
-                                                        font=('Arial', 20, 'bold'),
-                                                        width=150,
-                                                        height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb2.place(x=490, y=400)
+            self.bot_thumb1 = customtkinter.CTkButton(self.janela4,
+                                                            text='Variavel',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=18)
+            self.bot_thumb1.place(x=100, y=400)
 
-        self.bot_thumb3 = customtkinter.CTkButton(self.janela4,
-                                                        text='Lista',
-                                                        text_color='white', fg_color='black', bg_color='#306D92',
-                                                        hover_color='#F2CB05',
-                                                        font=('Arial', 20, 'bold'),
-                                                        width=150,
-                                                        height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb3.place(x=890, y=400)
+            self.bot_thumb2 = customtkinter.CTkButton(self.janela4,
+                                                            text='Função',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb2.place(x=490, y=400)
 
-        self.bot_thumb4 = customtkinter.CTkButton(self.janela4,
-                                                         text='Tkinter',
-                                                         text_color='white', fg_color='black', bg_color='#306D92',
-                                                         hover_color='#F2CB05',
-                                                         font=('Arial', 20, 'bold'),
-                                                         width=150,
-                                                         height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb4.place(x=1250, y=400)
+            self.bot_thumb3 = customtkinter.CTkButton(self.janela4,
+                                                            text='Lista',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb3.place(x=890, y=400)
 
-        self.bot_thumb5 = customtkinter.CTkButton(self.janela4,
-                                                         text='Dash',
-                                                         text_color='white', fg_color='black', bg_color='#306D92',
-                                                         hover_color='#F2CB05',
-                                                         font=('Arial', 20, 'bold'),
-                                                         width=150,
-                                                         height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb5.place(x=1250, y=700)
+            self.bot_thumb4 = customtkinter.CTkButton(self.janela4,
+                                                            text='Tkinter',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb4.place(x=1250, y=400)
 
-        self.bot_thumb6 = customtkinter.CTkButton(self.janela4,
-                                                         text='ReportLab',
-                                                         text_color='white', fg_color='black', bg_color='#306D92',
-                                                         hover_color='#F2CB05',
-                                                         font=('Arial', 20, 'bold'),
-                                                         width=150,
-                                                         height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb6.place(x=890, y=700)
+            self.bot_thumb5 = customtkinter.CTkButton(self.janela4,
+                                                            text='Dash',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb5.place(x=1250, y=700)
 
-        self.bot_thumb7 = customtkinter.CTkButton(self.janela4,
-                                                         text='Calculadora',
-                                                         text_color='white', fg_color='black', bg_color='#306D92',
-                                                         hover_color='#F2CB05',
-                                                         font=('Arial', 20, 'bold'),
-                                                         width=150,
-                                                         height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb7.place(x=490, y=700)
+            self.bot_thumb6 = customtkinter.CTkButton(self.janela4,
+                                                            text='ReportLab',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb6.place(x=890, y=700)
 
-        self.bot_thumb8 = customtkinter.CTkButton(self.janela4,
-                                                         text='Dados',
-                                                         text_color='white', fg_color='black', bg_color='#306D92',
-                                                         hover_color='#F2CB05',
-                                                         font=('Arial', 20, 'bold'),
-                                                         width=150,
-                                                         height=45, corner_radius=50, command=self.alerta)
-        self.bot_thumb8.place(x=100, y=700)
+            self.bot_thumb7 = customtkinter.CTkButton(self.janela4,
+                                                            text='Calculadora',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb7.place(x=490, y=700)
+
+            self.bot_thumb8 = customtkinter.CTkButton(self.janela4,
+                                                            text='Dados',
+                                                            text_color='white', fg_color='black', bg_color='#306D92',
+                                                            hover_color='#F2CB05',
+                                                            font=('Arial', 20, 'bold'),
+                                                            width=150,
+                                                            height=45, corner_radius=50, command=self.alerta)
+            self.bot_thumb8.place(x=100, y=700)
 
 #-----------------------------BACKEND---------------------------------------
 
@@ -470,10 +477,13 @@ class Tela_Principal(backend):
                 self.conexao.commit()
                 messagebox.showinfo('Sistema cadastro', 'Cadastro realizado com sucesso!')
                 self.desconecta_banco()
+                self.voltar1()
         except:
             messagebox.showerror('Cadastro', 'Erro no processamento do seu cadastro. Tente novamente!')
             self.desconecta_banco()
         self.desconecta_banco()
+
+
 
 # -------------------------------------ALERTA----------------------------
     def alerta(self):
