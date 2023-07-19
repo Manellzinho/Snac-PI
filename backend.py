@@ -20,7 +20,8 @@ class backend():
             nome TEXT NOT NULL,
             email TEXT NOT NULL,
             senha TEXT NOT NULL,
-            confirmarSenha TEXT NOT NULL)
+            confirmarSenha TEXT NOT NULL,
+            score INTEGER DEFAULT 0)
             ''')
         
         self.conexao.commit()
