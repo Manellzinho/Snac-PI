@@ -277,7 +277,7 @@ class Tela_Principal(backend):
 
 
             except:
-                    messagebox.showwarning('ERRO', 'email ou senha incorreto')
+                    messagebox.showwarning('ERRO', 'usuario ou senha incorreto')
                     self.desconecta_banco()
 
 
