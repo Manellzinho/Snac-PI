@@ -21,7 +21,7 @@ class Tela_Principal(backend):
 
         #---------- Frame -------
 
-        self.frame = customtkinter.CTkFrame(self.janela, fg_color='white', corner_radius=0, width=400, height=600)
+        self.frame = customtkinter.CTkFrame(self.janela, fg_color='white', corner_radius=0, width=400, height=800)
         self.frame.place(x=0, y=0)
 
         # labels
@@ -119,7 +119,7 @@ class Tela_Principal(backend):
 
         # ---------------------- Cadastro/Segunda Tela --------------------
 
-        self.frame2 = customtkinter.CTkFrame(self.janela2, fg_color='white', corner_radius=0, width=400, height=600)
+        self.frame2 = customtkinter.CTkFrame(self.janela2, fg_color='white', corner_radius=0, width=400, height=800)
         self.frame2.place(x=0, y=0)
 
         # -----------Labels---------------
@@ -218,50 +218,54 @@ class Tela_Principal(backend):
                     self.janela['bg'] = '#242424'
                     self.janela3.resizable(width=False, height=False)
 
-                    self.imagem1 = PhotoImage(file='imagens/teams.png')
+                    
+                    self.frame1 = customtkinter.CTkFrame(self.janela3, fg_color='#126F94', corner_radius=0, width=400, height=600)
+                    self.frame1.place(x=0, y=0)
+
+                    self.imagem1 = PhotoImage(file='imagens/teams.png') 
                     self.imagem2 = PhotoImage(file='imagens/py2.png')
                     self.tela1 = PhotoImage(file='imagens/anuncio1.png')
                     self.tela2 = PhotoImage(file='imagens/anuncio2.png')
                     self.tela3 = PhotoImage(file='imagens/anuncio3.png')
 
-                    self.fundo = Label(self.janela3, image=self.imagem2, width=1000, height=600)
+                    self.fundo = Label(self.janela3, image=self.imagem2, width=1500, height=800, bg='#136F95')
                     self.fundo.place(x=-2, y=53)
 
                     # Botões inferiores
                     self.frame_1 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color='#126F94', image= self.tela1, text='', fg_color='#126F94', command=self.alerta)
-                    self.frame_1.place(x= 15, y=450)
+                    self.frame_1.place(x= 325, y=635)
 
                     self.frame_2 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color= '#126F94', text= '', image=self.tela2,fg_color='#126F94', command=self.alerta)
-                    self.frame_2.place(x=400, y=450)
+                    self.frame_2.place(x=625, y=635)
 
                     self.frame_3 = customtkinter.CTkButton(self.janela3, width=160, height=130, corner_radius= 20, bg_color='#126F94', text='', fg_color='#126F94', image=self.tela3, command=self.alerta)
-                    self.frame_3.place(x=780, y=450)
+                    self.frame_3.place(x=925, y=635)
 
                     # frame principal black
-                    self.frame_4 = customtkinter.CTkFrame(self.janela3, width=1000, height=110, fg_color='#3B3538', corner_radius=0)
+                    self.frame_4 = customtkinter.CTkFrame(self.janela3, width=1500, height=150, fg_color='#3B3538', corner_radius=0)
                     self.frame_4.place(x=0, y=0)
 
-                    self.jogar = customtkinter.CTkButton(self.frame_4, text='Jogar', text_color='white', font=('Bold', 25),
-                                                        corner_radius=18, width=150, command=self.janela_jogar,
-                                                        height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
-                    self.jogar.place(x=105, y=40)
+                    self.jogar = customtkinter.CTkButton(self.frame_4, text='JOGAR', text_color='white', font=('Bold', 25, 'bold'),
+                                                        corner_radius=18, width=200, height=50, command=self.janela_jogar,
+                                                        bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05')
+                    self.jogar.place(x=65, y=55)
 
 
-                    self.bot3 = customtkinter.CTkButton(self.frame_4, text='Loja', text_color='white', font=('Bold', 19),
+                    self.bot3 = customtkinter.CTkButton(self.frame_4, text='Loja', text_color='white', font=('Bold', 19, 'bold'),
                                                         corner_radius=18, width=150,
                                                         height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05', command=self.alerta)
-                    self.bot3.place(x=455, y=40)
+                    self.bot3.place(x=520, y=60)
 
-                    self.bot4 = customtkinter.CTkButton(self.frame_4, text='Perfil', text_color='white', font=('Bold', 19),
+                    self.bot4 = customtkinter.CTkButton(self.frame_4, text='Perfil', text_color='white', font=('Bold', 19, 'bold'),
                                                         corner_radius=18, width=150,
                                                         height=40, bg_color='#3B3538', fg_color='#7CCAF4', hover_color='#F2CB05', command=self.alerta)
-                    self.bot4.place(x=625, y=40)
+                    self.bot4.place(x=720, y=60)
 
                     self.bot5 = customtkinter.CTkButton(self.frame_4, text='', width=40,
                                                         height=40, bg_color='#3B3538', fg_color='#3B3538',
                                                         hover_color='#F2CB05', image=self.imagem1, anchor='center',
                                                         compound='left', command=self.alerta)
-                    self.bot5.place(x=890, y=40)
+                    self.bot5.place(x=1400, y=60)
 
                     self.combobox = customtkinter.CTkOptionMenu(self.janela3, values=['PYTHON', 'JAVA', 'PORTUGOL'],
                                                                 corner_radius=18, fg_color='#7CCAF4',
@@ -269,11 +273,11 @@ class Tela_Principal(backend):
                                                                 font=('Bold', 17))
                     
                     self.combobox.set('PYTHON')
-                    self.combobox.place(x=280, y=40)
+                    self.combobox.place(x=320, y=60)
 
 
             except:
-                    messagebox.showwarning('ERRO', 'email ou senha incorreto')
+                    messagebox.showwarning('ERRO', 'usuario ou senha incorreto')
                     self.desconecta_banco()
 
 
@@ -302,7 +306,7 @@ class Tela_Principal(backend):
             self.img9 = PhotoImage(file='imagens/thumb7.png')
             self.img10 = PhotoImage(file='imagens/thumb8.png')
 
-            self.frame3 = customtkinter.CTkFrame(self.janela4, fg_color='#3B3538', corner_radius=0, width=2000, height=150)
+            self.frame3 = customtkinter.CTkFrame(self.janela4, fg_color='#3B3538', corner_radius=0, width=1500, height=150)
             self.frame3.place(x=0, y=0)
 
             # -----------------------------BOTÕES-------------------------------------------
@@ -460,7 +464,7 @@ class Tela_Principal(backend):
         self.conecta_banco()
         self.sql.execute('''
             INSERT INTO usuarios (nome, email, senha, confirmarSenha)
-            values (?,?,?,?)''',
+            values (?,?,?,?,?)''',
                         (self.capturar_nome, self.capturar_email, self.capturar_senha, self.capturar_confirmar_senha))
         try:
             if self.capturar_nome == '' or self.capturar_email == '' or self.capturar_senha == '' or self.capturar_confirmar_senha == '':
